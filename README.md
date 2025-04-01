@@ -7,6 +7,8 @@ A **HackMeFast** egy FastAPI alapú webalkalmazás, amelyet **szándékosan** ol
 - **Directory Traversal**
 - **Cross-Site Request Forgery (CSRF)**
 - **Cross-Site Scripting (XSS)**
+- **SQL injection (SQLi)**
+- **...**
 
 ## Főbb jellemzők  
 -  **FastAPI-alapú sérülékeny backend**  

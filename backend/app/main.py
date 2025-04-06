@@ -1,12 +1,21 @@
 from fastapi import FastAPI, Form, Request, Response
 from fastapi.responses import PlainTextResponse
 import os, secrets, sqlite3
+from fastapi.middleware.cors import CORSMiddleware
 
 SESSION_COOKIE = "session_id"
 BASE_DIR = "backend/static/example"
 DB_PATH= "backend/users.db"
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/read-file/")
 async def read_file(filename: str):

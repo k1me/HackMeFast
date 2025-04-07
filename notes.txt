@@ -40,3 +40,17 @@ Minden parancs így kezdődik egyelőre curl -X POST "http://localhost:8000/logi
     -  "username=' or 1=1 /*&password=vmi"
 
 [táblák lekérdezése UNION segítségével] - (ehhez előbb valami felhasználói felületre lesz szükség)
+
+XSS-ötletelés
+https://owasp.org/www-community/Types_of_Cross-Site_Scripting
+Reflected XSS
+Stored XSS
+DOM Based XSS ... 
+
+További sérülékenységek és vagy valami exploitok bemutatása/gyakorlása:
+    -valami brute force bejelentkezési oldal (hydra)
+    -kriptográfiai algoritmusok
+    -fájl feltöltés
+    -fájl letöltés/fájl tartalom kiiratás
+    -...
+    src: DVWA

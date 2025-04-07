@@ -1,0 +1,22 @@
+<header class="topbar">
+  <h1>HackMeFast</h1>
+</header>
+<div class="wrapper">
+  <div class="container">
+    <nav class="sidebar">
+      <ul>
+        <li routerLink="/dashboard/xss" routerLinkActive="active">XSS</li>
+        <li routerLink="/dashboard/sqli" routerLinkActive="active">SQLi</li>
+        <li routerLink="/dashboard/csrf" routerLinkActive="active">CSRF</li>
+        <li>Brute Force</li>
+        <li>Kryptography</li>
+        <li>File upload</li>
+        <li>File download</li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

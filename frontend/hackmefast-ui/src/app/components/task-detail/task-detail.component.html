@@ -1,0 +1,21 @@
+<div class="task-detail">
+  <h3>{{ task?.title }} - {{task?.difficulty}}</h3>
+  <p>{{ task?.description }}</p>
+
+  <form (ngSubmit)="submitSQLiTask()">
+    <input
+      type="text"
+      [(ngModel)]="userInput"
+      name="userInput"
+      placeholder="Add meg a bemenetet"
+    />
+    <button type="submit">Küldés</button>
+  </form>
+
+  <div *ngIf="response">
+    <h4>Válasz:</h4>
+    <pre>{{ response | json }}</pre>
+  </div>
+
+  <button (click)="goBack()">Vissza</button>
+</div>

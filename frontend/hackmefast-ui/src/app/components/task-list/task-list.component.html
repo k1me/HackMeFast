@@ -1,0 +1,8 @@
+<h2>{{selectedCategory}}</h2>
+<div class="card-grid">
+  <div class="card" *ngFor="let task of tasks">
+    <h3>{{ task.title }}</h3>
+    <p>{{ task.description }}</p>
+    <button [routerLink]="['task', task.id]">Indítás</button>
+  </div>
+</div>

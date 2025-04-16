@@ -11,7 +11,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TaskDetailComponent implements OnInit {
   task: any;
-  userInput: any;
+  username: any;
+  password: any;
   response: any;
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +35,7 @@ export class TaskDetailComponent implements OnInit {
       return;
     }
   
-    const url = `http://localhost:8000/sqli/${this.task.difficulty}/search?username=${this.userInput}`;
+    const url = `http://localhost:8000/sqli/${this.task.difficulty}/search?username=${this.username}&password=${this.password}`;
   
     this.http.get(url).subscribe(
       (res) => {

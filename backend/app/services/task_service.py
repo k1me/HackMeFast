@@ -1,9 +1,27 @@
 from app.models.task import Task
 
 tasks = [
-    Task(1, "SQL Injection", "easy", "SQLi easy feladat leírása", "SQLi"),
-    Task(2, "SQL Injection", "medium", "SQLi medium feladat leírása", "SQLi"),
-    Task(3, "SQL Injection", "hard", "SQLi medium feladat leírása", "SQLi"),
+    Task(
+        1,
+        "SQL Injection",
+        "easy",
+        "Egy egyszerű felhasználónév‑jelszó alapú bejelentkezési űrlappal dolgozol, ahol nincsen semmilyen bemenetszűrés. A célod, hogy jelszó ismerete nélkül belépj egy tetszőleges felhasználó (például az admin) nevében.",
+        "SQLi",
+    ),
+    Task(
+        2,
+        "SQL Injection",
+        "medium",
+        "Ebben a feladatban a bejelentkezési logika ugyanúgy felhasználónév‑jelszó párral dolgozik, de karaktertiltó-környezet lett bevezetve. A cél, hogy mégis sikerüljön SQL injection-nel megkerülni a bejelentkezést.",
+        "SQLi",
+    ),
+    Task(
+        3,
+        "SQL Injection",
+        "hard",
+        "Egy bejelentkezési felület segítségével tudsz lekérdezni felhasználókat az adatbázisból. A szerver nem használ paraméterezett lekérdezést, hanem a username és password mezőket közvetlenül illeszti be az SQL utasításba.",
+        "SQLi",
+    ),
 ]
 
 

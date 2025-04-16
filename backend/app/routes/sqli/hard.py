@@ -5,10 +5,17 @@ from app.config import DB_PATH
 
 router = APIRouter()
 
+FORBIDDEN = ["'", '"', "--", ";", "#"]
+
+
+def is_input_safe(value: str) -> bool:
+    lower_val = value.lower()
+    return not any(bad in lower_val for bad in FORBIDDEN)
 
 @router.get("/search")
-async def vulnerable_query_hard(request: Request):
-    username = request.query_params.get("username", "")
+async def vulnerable_query_hard(username: str, password: str):
+    if not is_input_safe(username) or not is_input_safe(password):
+        return JSONResponse(status_code=422, content={"error": "Invalid input"})
 
     try:
         conn = sqlite3.connect(DB_PATH)
@@ -17,15 +24,17 @@ async def vulnerable_query_hard(request: Request):
         query = f"SELECT username, role FROM users WHERE role='user' AND username = '{username}'"
         cursor.execute(query)
 
-        results = cursor.fetchall()
+        result = cursor.fetchall()
 
-        if not results:
-            return JSONResponse(status_code=404, content={"error": "No results found"})
+        if result:
+            return {"status": "success", "data": result}
+        else:
+            return {"status": "no result"}
 
-        return {"result": [{"username": row[0], "role": row[1]} for row in results]}
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
     finally:
-        if cursor and conn:
+        if cursor:
             cursor.close()
+        if conn:
             conn.close()

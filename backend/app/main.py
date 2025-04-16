@@ -3,9 +3,17 @@ from fastapi.responses import PlainTextResponse
 import os, secrets, sqlite3
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routes import tasks
+
+from app.routes.sqli import easy as sqli_easy
+from app.routes.sqli import medium as sqli_medium
+from app.routes.sqli import hard as sqli_hard
+
+from app.config import DB_PATH
+
+
 SESSION_COOKIE = "session_id"
 BASE_DIR = "backend/static/example"
-DB_PATH= "backend/users.db"
 
 app = FastAPI()
 
@@ -16,6 +24,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(tasks.router)
+
+app.include_router(sqli_easy.router, prefix="/sqli/easy")
+app.include_router(sqli_medium.router, prefix="/sqli/medium")
+app.include_router(sqli_hard.router, prefix="/sqli/hard")
+
 
 @app.get("/read-file/")
 async def read_file(filename: str):

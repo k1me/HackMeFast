@@ -18,7 +18,7 @@ export class TaskDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private taskService: TaskService,
     private router: Router,
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id')!;
@@ -34,14 +34,15 @@ export class TaskDetailComponent implements OnInit {
       console.error('Nincs task id(?)');
       return;
     }
-  
-    const url = `http://localhost:8000/sqli/${this.task.difficulty}/search?username=${this.username}&password=${this.password}`;
-  
+    // ide egy post check még kell
+    const url = `http://localhost:8000/sqli/${this.task.id}?username=${this.username}&password=${this.password}`;
+
     this.http.get(url).subscribe(
       (res) => {
         this.response = res;
       },
       (err) => {
+        this.response = err;
         console.error('Hiba:', err);
       }
     );

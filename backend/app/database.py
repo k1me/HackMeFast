@@ -29,6 +29,7 @@ def init_db():
     cursor.execute("INSERT OR IGNORE INTO users(username, password, role) VALUES ('user1', 'asd321', 'user')")
     cursor.execute("INSERT OR IGNORE INTO users(username, password, role) VALUES ('user2', 'dsa123' , 'user')")
     cursor.execute("INSERT OR IGNORE INTO users(username, password, role) VALUES ('user3', 'dsadsa' , 'user')")
+    cursor.execute("INSERT OR IGNORE INTO users(username, password, role) VALUES ('flagholder', 'FLAG{leaked_data_pelda_flag}' , 'user')")
     
     conn.commit()
     conn.close()

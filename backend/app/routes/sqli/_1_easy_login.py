@@ -6,7 +6,7 @@ from app.config import DB_PATH
 router = APIRouter()
 
 
-@router.get("/search")
+@router.get("/1")
 async def vulnerable_query_easy(username: str, password: str):
 
     try:
@@ -15,14 +15,21 @@ async def vulnerable_query_easy(username: str, password: str):
 
         query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
         cursor.execute(query)
-        
+
         result = cursor.fetchall()
 
         if result:
-            return {"status": "success", "data": result}
+            first_row = result[0]
+            if first_row[1] == "admin":
+                return {"status": "success", "flag": "FLAG{pelda_flag}"}
+            else:
+                return {"status": "success", "data": result}
         else:
-            return {"status": "no result"}
-        
+            return {
+                "status": "no result",
+                "message": "Nem megfelelő bejelentkezési adatok",
+            }
+
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
     finally:

@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-import sqlite3
-from app.config import DB_PATH
+from app.utils.query import execute_query
 
 router = APIRouter()
 
@@ -10,13 +9,9 @@ router = APIRouter()
 async def vulnerable_query_easy(username: str, password: str):
 
     try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-
         query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cursor.execute(query)
 
-        result = cursor.fetchall()
+        result = execute_query(query, 1)
 
         if result:
             first_row = result[0]
@@ -25,15 +20,7 @@ async def vulnerable_query_easy(username: str, password: str):
             else:
                 return {"status": "success", "data": result}
         else:
-            return {
-                "status": "no result",
-                "message": "Nem megfelelő bejelentkezési adatok",
-            }
+            return {"message": "Nem megfelelő bejelentkezési adatok"}
 
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()

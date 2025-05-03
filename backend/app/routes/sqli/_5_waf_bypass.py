@@ -1,29 +1,21 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-import sqlite3
-from app.config import DB_PATH
+from app.utils.query import execute_query
 
 router = APIRouter()
 
 
 @router.get("/5")
 async def waf_bypass(username: str, password: str):
-    conn = None
-    cursor = None
+    forbidden = ["or", "=", "/*", "'--", "' --", "'  -"]
     try:
-        if any(
-            x in username.lower() for x in ["or", "=", "/*", "'--", "' --", "'  -"]
-        ) or any(
-            x in password.lower() for x in ["or", "=", "/*", "'--", "' --", "'  -"]
+        if any(fb in username.lower() for fb in forbidden) or any(
+            fb in password.lower() for fb in forbidden
         ):
             return {"message": "Tiltott karaktert használtál!"}
 
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-
         query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cursor.execute(query)
-        result = cursor.fetchall()
+        result = execute_query(query, 5)
 
         if result[0][1] == "admin":
             return {"message": "Flag: FLAG{waf_bypass_success}"}
@@ -34,9 +26,3 @@ async def waf_bypass(username: str, password: str):
 
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
-
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()

@@ -28,3 +28,4 @@
 *.iml
 *.bak
 *.tmp
+backend/app/generated_secrets.json

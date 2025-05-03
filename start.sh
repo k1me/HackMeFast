@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#leginkabb friss inditasra szolgal, de ha az azadbazist szeretnenk resetelni alap allapotba, annak is megfelel
-
 set -e
 
 if [ -d "venv" ]; then
@@ -11,9 +9,24 @@ else
     exit 1
 fi
 
+echo "Szükséges csomagok telepítése..."
 pip install -r requirements.txt
 
-python backend/app/database.py
+cd backend
 
-fastapi dev backend/app/main.py
+echo "Adatbázis seedelése..."
+python3 -m app.database.seeder
+
+echo "Backend indítása..."
+fastapi dev app/main.py &
+#alternativ inditas
 #uvicorn backend.app.main:app --port 8000 --reload
+
+echo "Frontend indítása..."
+cd ../frontend/hackmefast-ui
+if command -v ng &>/dev/null; then
+    ng serve --open
+else
+    echo "Nincs Angulár telepítve! Futtasd: npm install -g @angular/cli"
+    exit 1
+fi
